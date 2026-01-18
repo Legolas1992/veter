@@ -1,0 +1,79 @@
+2026-01-06 21:40:06 - INICIO SAVE
+POST DATA: Array
+(
+    [cliente_id] => 1
+    [tipos] => Array
+        (
+            [0] => producto
+        )
+
+    [descripciones] => Array
+        (
+            [0] => rollal canin
+        )
+
+    [productos_ids] => Array
+        (
+            [0] => 1
+        )
+
+    [cantidades] => Array
+        (
+            [0] => 8
+        )
+
+    [precios] => Array
+        (
+            [0] => 20000.00
+        )
+
+    [monto_total] => 160000.00
+)
+
+Transaction Started
+Factura Header Inserted ID: 7
+Processing Item 0: Type=producto, PID=1, Qty=8
+Stock Check: Found 10 Need 8
+ERROR ROLLBACK: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'referencia_id' in 'field list'
+2026-01-06 21:40:32 - INICIO SAVE
+POST DATA: Array
+(
+    [cliente_id] => 1
+    [tipos] => Array
+        (
+            [0] => producto
+            [1] => servicio
+        )
+
+    [descripciones] => Array
+        (
+            [0] => rollal canin
+            [1] => control
+        )
+
+    [productos_ids] => Array
+        (
+            [0] => 1
+            [1] => 
+        )
+
+    [cantidades] => Array
+        (
+            [0] => 8
+            [1] => 1
+        )
+
+    [precios] => Array
+        (
+            [0] => 20000.00
+            [1] => 3000
+        )
+
+    [monto_total] => 163000.00
+)
+
+Transaction Started
+Factura Header Inserted ID: 8
+Processing Item 0: Type=producto, PID=1, Qty=8
+Stock Check: Found 10 Need 8
+ERROR ROLLBACK: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'referencia_id' in 'field list'
