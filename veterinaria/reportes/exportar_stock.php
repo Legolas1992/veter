@@ -4,6 +4,12 @@ session_start();
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../includes/pdf_helper.php';
 
+// Auth Check
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: " . BASE_URL . "auth/login.php");
+    exit;
+}
+
 $database = new Database();
 $db = $database->getConnection();
 $productos = $db->query("SELECT p.*, r.nombre as rubro FROM productos p LEFT JOIN rubros r ON p.rubro_id = r.id ORDER BY p.nombre ASC")->fetchAll();
@@ -14,7 +20,7 @@ class StockPDF extends VeterinaryPDF {
         $this->SetFont('Arial','B',15);
         $this->Cell(0,10,'Reporte de Stock',0,0,'C');
         $this->Ln(15);
-        
+
         // Col headers
         $this->SetFont('Arial','B',10);
         $this->Cell(60,10,'Producto',1);
@@ -38,7 +44,7 @@ foreach($productos as $p) {
     } else {
         $pdf->SetTextColor(0,0,0);
     }
-    
+
     $pdf->Cell(60,10,utf8_decode($p['nombre']),1);
     $pdf->Cell(40,10,utf8_decode($p['rubro'] ?? ''),1);
     $pdf->Cell(40,10,utf8_decode($p['presentacion'] ?? ''),1);
