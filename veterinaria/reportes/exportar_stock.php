@@ -2,6 +2,13 @@
 // reportes/exportar_stock.php
 session_start();
 require_once __DIR__ . '/../config/config.php';
+
+// Auth Check
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: " . BASE_URL . "auth/login.php");
+    exit;
+}
+
 require_once __DIR__ . '/../includes/pdf_helper.php';
 
 $database = new Database();
@@ -14,7 +21,7 @@ class StockPDF extends VeterinaryPDF {
         $this->SetFont('Arial','B',15);
         $this->Cell(0,10,'Reporte de Stock',0,0,'C');
         $this->Ln(15);
-        
+
         // Col headers
         $this->SetFont('Arial','B',10);
         $this->Cell(60,10,'Producto',1);
@@ -38,7 +45,7 @@ foreach($productos as $p) {
     } else {
         $pdf->SetTextColor(0,0,0);
     }
-    
+
     $pdf->Cell(60,10,utf8_decode($p['nombre']),1);
     $pdf->Cell(40,10,utf8_decode($p['rubro'] ?? ''),1);
     $pdf->Cell(40,10,utf8_decode($p['presentacion'] ?? ''),1);
