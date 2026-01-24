@@ -2,6 +2,16 @@
 // extender_licencia.php
 // Este archivo debería estar protegido o ser eliminado después de usarlo.
 require_once 'config/config.php';
+
+// Auth Check
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: " . BASE_URL . "auth/login.php");
+    exit;
+}
+if ($_SESSION['usuario_rol'] !== 'admin') {
+    die("Acceso denegado: Se requieren permisos de administrador.");
+}
+
 require_once 'config/db.php';
 
 $msg = "";
