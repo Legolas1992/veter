@@ -7,3 +7,8 @@
 **Vulnerability:** A leftover setup file `veterinaria/reset_admin.php` allowed unauthenticated users to reset the administrator password and create new admin accounts. This is a critical backdoor.
 **Learning:** Development and setup scripts (e.g., database seeders, password resetters) are often left in the web root after deployment. These are prime targets for attackers.
 **Prevention:** Never deploy setup scripts to production. If they are needed, protect them with strong authentication (e.g., basic auth at server level) or, better yet, make them run only via CLI outside the web root.
+
+## 2026-01-25 - Unauthenticated License Extension Script
+**Vulnerability:** The script `veterinaria/extender_licencia.php` was accessible without authentication, allowing any user to extend the system license validity indefinitely and modify the database.
+**Learning:** Business-critical administrative scripts are sometimes left unprotected if they are considered "internal" or "temporary," but security through obscurity is not security.
+**Prevention:** Ensure all PHP files that perform database operations or sensitive actions include the session verification logic or include the main authenticated header.

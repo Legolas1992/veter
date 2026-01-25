@@ -1,8 +1,13 @@
 <?php
 // extender_licencia.php
-// Este archivo debería estar protegido o ser eliminado después de usarlo.
 require_once 'config/config.php';
 require_once 'config/db.php';
+
+// Auth Check
+if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'admin') {
+    header("Location: " . BASE_URL . "auth/login.php");
+    exit;
+}
 
 $msg = "";
 $database = new Database();
