@@ -27,10 +27,7 @@ try {
 // =================================
 
 // Auth Check
-if (!isset($_SESSION['usuario_id']) && basename($_SERVER['PHP_SELF']) != 'login.php') {
-    header("Location: " . BASE_URL . "auth/login.php");
-    exit;
-}
+require_once __DIR__ . '/auth_check.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">

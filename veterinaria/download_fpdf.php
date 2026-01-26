@@ -1,5 +1,8 @@
 <?php
 // download_fpdf.php
+require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/includes/auth_check.php';
+
 $url = 'https://raw.githubusercontent.com/Setasign/FPDF/master/fpdf.php';
 $dest = 'includes/fpdf/fpdf.php';
 

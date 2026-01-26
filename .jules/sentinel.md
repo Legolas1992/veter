@@ -7,3 +7,8 @@
 **Vulnerability:** A leftover setup file `veterinaria/reset_admin.php` allowed unauthenticated users to reset the administrator password and create new admin accounts. This is a critical backdoor.
 **Learning:** Development and setup scripts (e.g., database seeders, password resetters) are often left in the web root after deployment. These are prime targets for attackers.
 **Prevention:** Never deploy setup scripts to production. If they are needed, protect them with strong authentication (e.g., basic auth at server level) or, better yet, make them run only via CLI outside the web root.
+
+## 2026-07-20 - Unprotected Backend Action Scripts
+**Vulnerability:** Backend form handlers (`veterinaria/clientes/guardar.php`, `eliminar.php`, etc.) performed database operations without checking for authentication. Attackers could manipulate data by sending POST requests directly to these files.
+**Learning:** In native PHP apps, files that don't output HTML (like AJAX handlers or form processors) often miss the 'header.php' include where auth logic usually lives.
+**Prevention:** Created a centralized `veterinaria/includes/auth_check.php` and enforced its inclusion in all action scripts.
