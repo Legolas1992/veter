@@ -1,7 +1,9 @@
 <?php
 // extender_licencia.php
-// Este archivo debería estar protegido o ser eliminado después de usarlo.
 require_once 'config/config.php';
+require_once 'includes/auth_check.php';
+require_admin();
+
 require_once 'config/db.php';
 
 $msg = "";
