@@ -7,3 +7,8 @@
 **Vulnerability:** A leftover setup file `veterinaria/reset_admin.php` allowed unauthenticated users to reset the administrator password and create new admin accounts. This is a critical backdoor.
 **Learning:** Development and setup scripts (e.g., database seeders, password resetters) are often left in the web root after deployment. These are prime targets for attackers.
 **Prevention:** Never deploy setup scripts to production. If they are needed, protect them with strong authentication (e.g., basic auth at server level) or, better yet, make them run only via CLI outside the web root.
+
+## 2026-01-29 - Unauthenticated Form Handlers and Insecure Logging
+**Vulnerability:** Multiple backend form handlers (`clientes/guardar.php`, `facturacion/guardar.php`, etc.) lacked authentication checks, allowing unauthenticated data manipulation. Additionally, `facturacion/guardar.php` was logging sensitive transaction data and SQL errors to a public text file.
+**Learning:** "Invisible" backend scripts (redirectors) often get missed during security reviews because they don't have a UI. Developers sometimes leave debug logging enabled in production code.
+**Prevention:** Enforce a strict "secure by default" policy where a middleware or base include (`auth_check.php`) is mandatory for *all* PHP files. Use a proper logging library that writes to a secure location outside the web root, not `file_put_contents`.

@@ -1,6 +1,7 @@
 <?php
 // inventario/guardar_producto.php
 require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../includes/auth_check.php';
 require_once __DIR__ . '/../config/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
