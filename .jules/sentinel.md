@@ -12,3 +12,8 @@
 **Vulnerability:** Multiple backend form handlers (`clientes/guardar.php`, `facturacion/guardar.php`, etc.) lacked authentication checks, allowing unauthenticated data manipulation. Additionally, `facturacion/guardar.php` was logging sensitive transaction data and SQL errors to a public text file.
 **Learning:** "Invisible" backend scripts (redirectors) often get missed during security reviews because they don't have a UI. Developers sometimes leave debug logging enabled in production code.
 **Prevention:** Enforce a strict "secure by default" policy where a middleware or base include (`auth_check.php`) is mandatory for *all* PHP files. Use a proper logging library that writes to a secure location outside the web root, not `file_put_contents`.
+
+## 2026-05-21 - Unauthenticated API Endpoint (IDOR Risk)
+**Vulnerability:** The `veterinaria/facturacion/api_check_status.php` endpoint was accessible without authentication and exposed database error details. This allowed unauthenticated users to query invoice statuses (IDOR potential).
+**Learning:** API endpoints returning JSON often escape notice during manual browsing but are critical attack surfaces. They must include the same authentication checks as UI pages.
+**Prevention:** Audit all `header('Content-Type: application/json')` files to ensure they include `auth_check.php` or equivalent validation before processing any input.
