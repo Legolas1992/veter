@@ -17,3 +17,8 @@
 **Vulnerability:** The `veterinaria/facturacion/api_check_status.php` endpoint was accessible without authentication and exposed database error details. This allowed unauthenticated users to query invoice statuses (IDOR potential).
 **Learning:** API endpoints returning JSON often escape notice during manual browsing but are critical attack surfaces. They must include the same authentication checks as UI pages.
 **Prevention:** Audit all `header('Content-Type: application/json')` files to ensure they include `auth_check.php` or equivalent validation before processing any input.
+
+## 2026-05-24 - Unauthenticated External Dependency Script
+**Vulnerability:** `veterinaria/download_fpdf.php` was accessible without authentication, allowing any user to trigger an external file download and overwrite `includes/fpdf/fpdf.php`.
+**Learning:** Utility scripts for setup or maintenance often bypass standard authentication because they are "just for admins," but if they are in the web root, they are public.
+**Prevention:** Always wrap utility scripts with `require_admin()` or move them outside the web root (e.g., to a `bin/` directory) and run them via CLI.
