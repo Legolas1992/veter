@@ -22,3 +22,8 @@
 **Vulnerability:** `veterinaria/download_fpdf.php` was accessible without authentication, allowing any user to trigger an external file download and overwrite `includes/fpdf/fpdf.php`.
 **Learning:** Utility scripts for setup or maintenance often bypass standard authentication because they are "just for admins," but if they are in the web root, they are public.
 **Prevention:** Always wrap utility scripts with `require_admin()` or move them outside the web root (e.g., to a `bin/` directory) and run them via CLI.
+
+## 2026-05-25 - Unauthenticated IDOR in Payment Simulation
+**Vulnerability:** `veterinaria/facturacion/pago_simulado.php` allowed unauthenticated users to mark any invoice as paid by manipulating the `id` parameter (IDOR).
+**Learning:** Public-facing features (like QR codes) cannot use session auth but must still be secured. ID enumeration is trivial for integers.
+**Prevention:** Use HMAC-SHA256 signed URLs for all stateless, public-facing actions. Verify the signature before processing any state changes.

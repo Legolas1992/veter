@@ -24,7 +24,8 @@ if (!$factura) {
 
 // URL that the user would "scan". In a real local setup, use IP if testing from mobile, or localhost if testing in another tab.
 // We will use localhost because the user is testing locally on the same machine.
-$simulated_payment_url = BASE_URL . "facturacion/pago_simulado.php?id=" . $id;
+$token = hash_hmac('sha256', $id, APP_SECRET);
+$simulated_payment_url = BASE_URL . "facturacion/pago_simulado.php?id=" . $id . "&token=" . $token;
 ?>
 
 <div class="page-header">
