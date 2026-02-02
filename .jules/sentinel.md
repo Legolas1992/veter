@@ -27,3 +27,8 @@
 **Vulnerability:** `veterinaria/facturacion/pago_simulado.php` allowed unauthenticated users to mark any invoice as paid by manipulating the `id` parameter (IDOR).
 **Learning:** Public-facing features (like QR codes) cannot use session auth but must still be secured. ID enumeration is trivial for integers.
 **Prevention:** Use HMAC-SHA256 signed URLs for all stateless, public-facing actions. Verify the signature before processing any state changes.
+
+## 2026-05-26 - Unauthenticated Deletion Scripts
+**Vulnerability:** `eliminar.php` scripts in `clientes`, `mascotas`, and `turnos` were accessible without authentication. Attackers could delete arbitrary records by ID enumeration.
+**Learning:** In flat PHP architectures, every file is a route. It's easy to copy-paste a CRUD file (like `eliminar.php`) and forget to include the auth check header, especially if the dev tests it while logged in (where it "just works").
+**Prevention:** Use a router or front-controller pattern. If that's not possible, write a linter or pre-commit hook that greps for `auth_check.php` in every `.php` file that performs write operations.
