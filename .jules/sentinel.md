@@ -32,3 +32,8 @@
 **Vulnerability:** `eliminar.php` scripts in `clientes`, `mascotas`, and `turnos` were accessible without authentication. Attackers could delete arbitrary records by ID enumeration.
 **Learning:** In flat PHP architectures, every file is a route. It's easy to copy-paste a CRUD file (like `eliminar.php`) and forget to include the auth check header, especially if the dev tests it while logged in (where it "just works").
 **Prevention:** Use a router or front-controller pattern. If that's not possible, write a linter or pre-commit hook that greps for `auth_check.php` in every `.php` file that performs write operations.
+
+## 2026-05-27 - Persisting Unauthenticated Handlers
+**Vulnerability:** Despite previous fixes, `veterinaria/turnos/guardar.php` and `veterinaria/historial/guardar.php` remained unauthenticated. This allowed unauthorized appointment creation and medical record tampering/stock deduction.
+**Learning:** Fixing a class of bugs (like "missing auth in form handlers") requires exhaustive search, not just fixing the ones found in the initial report. `grep` is your friend.
+**Prevention:** Implement a CI check that lists all `.php` files receiving POST requests and verifies they include `auth_check.php` or have manual `$_SESSION` checks.
