@@ -37,3 +37,8 @@
 **Vulnerability:** Despite previous fixes, `veterinaria/turnos/guardar.php` and `veterinaria/historial/guardar.php` remained unauthenticated. This allowed unauthorized appointment creation and medical record tampering/stock deduction.
 **Learning:** Fixing a class of bugs (like "missing auth in form handlers") requires exhaustive search, not just fixing the ones found in the initial report. `grep` is your friend.
 **Prevention:** Implement a CI check that lists all `.php` files receiving POST requests and verifies they include `auth_check.php` or have manual `$_SESSION` checks.
+
+## 2026-05-30 - Information Disclosure via Exception Messages
+**Vulnerability:** Database connection errors and system exceptions were being echoed directly to the user or passed via URL parameters in `db.php` and `auth_action.php`. This exposes database credentials, hostnames, and internal path structures to attackers (CWE-209).
+**Learning:** Developers often output raw exception messages to debug issues during development but forget to switch to secure logging in production. In PHP, `catch (Exception $e) { echo $e->getMessage(); }` is a dangerous default pattern.
+**Prevention:** Always use `error_log()` for technical details and show generic, user-friendly messages to the end user. Configure `display_errors = Off` in production `php.ini`.

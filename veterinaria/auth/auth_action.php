@@ -34,7 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
         }
 
     } catch (PDOException $e) {
-        header("Location: login.php?error=Error del sistema: " . $e->getMessage());
+        error_log("Login Error: " . $e->getMessage());
+        header("Location: login.php?error=Ocurrió un error en el sistema. Por favor contacte al administrador.");
         exit;
     }
 } else {
