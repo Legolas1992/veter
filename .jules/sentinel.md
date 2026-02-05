@@ -42,3 +42,8 @@
 **Vulnerability:** Database connection errors and system exceptions were being echoed directly to the user or passed via URL parameters in `db.php` and `auth_action.php`. This exposes database credentials, hostnames, and internal path structures to attackers (CWE-209).
 **Learning:** Developers often output raw exception messages to debug issues during development but forget to switch to secure logging in production. In PHP, `catch (Exception $e) { echo $e->getMessage(); }` is a dangerous default pattern.
 **Prevention:** Always use `error_log()` for technical details and show generic, user-friendly messages to the end user. Configure `display_errors = Off` in production `php.ini`.
+
+## 2026-06-05 - Hardcoded Secrets and Insecure Configuration
+**Vulnerability:** The application used a hardcoded fallback for `APP_SECRET` in `config.php`, exposing the signing key for critical operations. Additionally, `display_errors` was explicitly enabled in code, leaking path information.
+**Learning:** Hardcoding fallback secrets "for convenience" or "for lack of .env support" is a security anti-pattern. If the environment is not configured, the application should fail securely or generate a secure local secret, never fallback to a public constant.
+**Prevention:** Remove all hardcoded secret fallbacks. Implement a dynamic secret generation mechanism (e.g., `random_bytes`) for unconfigured environments and persist it securely outside the webroot or in a protected config directory.
