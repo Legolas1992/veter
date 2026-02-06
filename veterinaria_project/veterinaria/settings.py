@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
+from django.core.management.utils import get_random_secret_key
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +22,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-iq(wdch*w1lnk@-awvjs2itdkp$t&ju$(v6dp+k^tfq@zvp)--"
+# Sentinel: Dynamic secret key generation for security.
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+if not SECRET_KEY:
+    secret_file = BASE_DIR / '.secret.key'
+    try:
+        if secret_file.exists():
+            SECRET_KEY = secret_file.read_text().strip()
+        else:
+            SECRET_KEY = get_random_secret_key()
+            secret_file.write_text(SECRET_KEY)
+    except IOError:
+        # Fallback for read-only filesystems or permission errors, but log warning
+        import logging
+        logging.warning("Could not persist secret key to .secret.key. Using ephemeral key.")
+        SECRET_KEY = get_random_secret_key()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [host.strip() for host in os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if host.strip()]
 
 
 # Application definition
