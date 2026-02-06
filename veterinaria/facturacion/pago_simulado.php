@@ -3,11 +3,19 @@
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/db.php';
 
-if (!isset($_GET['id'])) {
+if (!isset($_GET['id']) || !isset($_GET['token'])) {
     die("Error: Pedido inválido");
 }
 
 $id = $_GET['id'];
+$token = $_GET['token'];
+
+// Verify Signature
+if (!hash_equals(hash_hmac('sha256', $id, APP_SECRET), $token)) {
+    http_response_code(403);
+    die("Error: Enlace no autorizado o expirado.");
+}
+
 $database = new Database();
 $db = $database->getConnection();
 
@@ -58,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['pay'])) {
             <p class="store">Pagar a <strong>Veterinaria</strong></p>
             <div class="amount">$<?php echo number_format($factura['monto'], 2); ?></div>
             <p><?php echo htmlspecialchars($factura['concepto']); ?></p>
-            
+
             <form method="POST">
                 <input type="hidden" name="pay" value="1">
                 <button type="submit" class="btn-pay">Pagar Ahora</button>

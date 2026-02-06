@@ -1,6 +1,7 @@
 <?php
 // facturacion/api_check_status.php
 require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../includes/auth_check.php';
 require_once __DIR__ . '/../config/db.php';
 
 header('Content-Type: application/json');
@@ -26,6 +27,7 @@ try {
         echo json_encode(['error' => 'Factura no encontrada']);
     }
 } catch (PDOException $e) {
-    echo json_encode(['error' => $e->getMessage()]);
+    error_log("Database Error in api_check_status: " . $e->getMessage());
+    echo json_encode(['error' => 'Error interno del servidor']);
 }
 ?>

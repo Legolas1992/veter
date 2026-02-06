@@ -2,6 +2,13 @@
 // reportes/exportar_historial.php
 session_start();
 require_once __DIR__ . '/../config/config.php';
+
+// Auth Check
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: " . BASE_URL . "auth/login.php");
+    exit;
+}
+
 require_once __DIR__ . '/../includes/pdf_helper.php';
 
 if (!isset($_GET['mascota_id'])) {
@@ -49,12 +56,12 @@ if (count($entradas) > 0) {
         $pdf->SetFont('Arial', 'B', 11);
         $pdf->SetFillColor(230, 230, 230);
         $pdf->Cell(0, 8, utf8_decode('Fecha: ' . date('d/m/Y H:i', strtotime($e['fecha']))), 1, 1, 'L', true);
-        
+
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell(40, 8, utf8_decode('Diagnóstico:'), 0, 0);
         $pdf->SetFont('Arial', '', 10);
         $pdf->MultiCell(0, 8, utf8_decode($e['diagnostico']), 0, 'L');
-        
+
         if (!empty($e['tratamiento'])) {
             $pdf->SetFont('Arial', 'B', 10);
             $pdf->Cell(40, 8, utf8_decode('Tratamiento:'), 0, 0);
