@@ -47,3 +47,8 @@
 **Vulnerability:** The application used a hardcoded fallback for `APP_SECRET` in `config.php`, exposing the signing key for critical operations. Additionally, `display_errors` was explicitly enabled in code, leaking path information.
 **Learning:** Hardcoding fallback secrets "for convenience" or "for lack of .env support" is a security anti-pattern. If the environment is not configured, the application should fail securely or generate a secure local secret, never fallback to a public constant.
 **Prevention:** Remove all hardcoded secret fallbacks. Implement a dynamic secret generation mechanism (e.g., `random_bytes`) for unconfigured environments and persist it securely outside the webroot or in a protected config directory.
+
+## 2026-06-06 - Hardcoded Secrets and Debug Mode in Django
+**Vulnerability:** `veterinaria_project/veterinaria/settings.py` contained a hardcoded `SECRET_KEY` and `DEBUG = True`, exposing the application to session hijacking and information leakage.
+**Learning:** Default Django templates or tutorials often include insecure defaults that developers forget to change before production. Hardcoded secrets in code are a persistent risk.
+**Prevention:** Use environment variables for all sensitive configuration. Implement a fallback mechanism that generates and persists a local secret key if environment variables are missing, ensuring security by default without complex setup. Always default `DEBUG` to `False` and configure `ALLOWED_HOSTS` dynamically.
