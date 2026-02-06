@@ -1,6 +1,9 @@
 <?php
 // extender_licencia.php
 require_once 'config/config.php';
+require_once 'includes/auth_check.php';
+require_admin();
+
 require_once 'config/db.php';
 
 // Auth Check
