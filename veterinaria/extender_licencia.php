@@ -6,6 +6,12 @@ require_admin();
 
 require_once 'config/db.php';
 
+// Auth Check
+if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'admin') {
+    header("Location: " . BASE_URL . "auth/login.php");
+    exit;
+}
+
 $msg = "";
 $database = new Database();
 $db = $database->getConnection();
